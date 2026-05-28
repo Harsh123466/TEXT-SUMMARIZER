@@ -24,7 +24,7 @@ app.add_middleware(
 # tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
 model_name = "harshadhana/text-summarizer-model"
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained("t5-small")
 
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
