@@ -20,8 +20,13 @@ app.add_middleware(
 )
 
 # model & tokenizer
-model = T5ForConditionalGeneration.from_pretrained("./saved_summary_model")
-tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
+# model = T5ForConditionalGeneration.from_pretrained("./saved_summary_model")
+# tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
+model_name = "harshadhana/text-summarizer-model"
+
+tokenizer = T5Tokenizer.from_pretrained(model_name)
+
+model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 # device
 if torch.cuda.is_available():
@@ -48,7 +53,7 @@ def clean_data(text):
     return text
 
 # logic for summarization
-def summarize_dialogue(dialogue):
+def summarize_dialogue(dialogue : str) -> str:
     dialogue = clean_data(dialogue) # clean
 
     # tokenize
