@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+from transformers import T5ForConditionalGeneration, T5Tokenizer, AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 import re
 from fastapi.templating import Jinja2Templates
@@ -24,9 +24,9 @@ app.add_middleware(
 # tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
 model_name = "harshadhana/text-summarizer-model"
 
-tokenizer = T5Tokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = T5ForConditionalGeneration.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
 # device
 if torch.cuda.is_available():
