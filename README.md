@@ -20,5 +20,7 @@ Open `http://127.0.0.1:8000`.
    - Health Check Path: `/health`
 4. Add this environment variable if it is not picked up from `render.yaml`:
    - `MODEL_NAME=harshadhana/text-summarizer-model`
+   - `PYTHON_VERSION=3.11.9`
+   - `HF_TOKEN=your_hugging_face_access_token`
 
-The first request after deployment can be slow because the Hugging Face model is loaded when the app starts.
+This Render app uses the Hugging Face Inference API so it does not load `torch` or the model into Render memory.

@@ -1,15 +1,15 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import T5ForConditionalGeneration, T5Tokenizer, AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 import re
-import os
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
 # Initialize FastAPI app
-app = FastAPI(title="Text Summarizer App", description="Text Summarization using T5", version="1.0")
+app = FastAPI(title="Text Summarixer App", description="Text Summarization using T5", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,8 +20,12 @@ app.add_middleware(
 )
 
 # model & tokenizer
-model_name = os.getenv("MODEL_NAME", "harshadhana/text-summarizer-model")
+# model = T5ForConditionalGeneration.from_pretrained("./saved_summary_model")
+# tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
+model_name = "harshadhana/text-summarizer-model"
+
 tokenizer = AutoTokenizer.from_pretrained(model_name)
+
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
 # device
@@ -31,7 +35,6 @@ else:
     device = torch.device("cpu")
 
 model.to(device)
-model.eval()
 
 # templating
 template = Jinja2Templates(directory=".")
@@ -52,10 +55,11 @@ def clean_data(text):
 # logic for summarization
 def summarize_dialogue(dialogue : str) -> str:
     dialogue = clean_data(dialogue) # clean
+    t5_input_text = f"summarize: {dialogue}"
 
     # tokenize
     inputs = tokenizer(
-        dialogue,
+        t5_input_text,
         padding="max_length",
         max_length=512,
         truncation=True,
@@ -64,14 +68,13 @@ def summarize_dialogue(dialogue : str) -> str:
 
     # generate the summary => token ids
     model.to(device)
-    with torch.no_grad():
-        targets = model.generate(
-            input_ids=inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
-            max_length=150,
-            num_beams=4,
-            early_stopping=True
-        )
+    targets = model.generate(
+        input_ids=inputs["input_ids"],
+        attention_mask=inputs["attention_mask"],
+        max_length=150,
+        num_beams=4,
+        early_stopping=True
+    )
     
     # decoded our output
     summary = tokenizer.decode(targets[0], skip_special_tokens=True) # EOS, SEP
@@ -87,7 +90,3 @@ async def summarize(input: DialogueInput):
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return template.TemplateResponse("index.html", {"request": request})
-
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
