@@ -25,10 +25,7 @@ app.add_middleware(
 model_name = "harshadhana/text-summarizer-model"
 
 print("Loading tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(
-    model_name,
-    use_fast=False
-)
+tokenizer = AutoTokenizer.from_pretrained("t5-small")
 
 print("Tokenizer loaded")
 
