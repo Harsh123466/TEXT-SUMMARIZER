@@ -1,3 +1,4 @@
+---
 title: Text Summarizer App
 emoji: 📝
 colorFrom: violet
@@ -5,6 +6,7 @@ colorTo: blue
 sdk: docker
 app_port: 7860
 pinned: false
+---
 
 # 📝 Text Summarizer
 
