@@ -73,8 +73,10 @@ def summarize_dialogue(dialogue : str) -> str:
     targets = model.generate(
         input_ids=inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
-        max_length=150,
+        max_length=60,
+        min_length=15,
         num_beams=4,
+        length_penalty=2.0,
         early_stopping=True
     )
     

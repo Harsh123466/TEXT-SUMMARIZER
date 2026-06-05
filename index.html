@@ -252,7 +252,7 @@
             summaryText.textContent = 'Summarizing...';
             submitButton.disabled = true;
 
-            try {
+            try {   
                 const response = await fetch("/summarize", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
