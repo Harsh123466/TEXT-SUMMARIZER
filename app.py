@@ -24,12 +24,18 @@ app.add_middleware(
 # tokenizer = T5Tokenizer.from_pretrained("./saved_summary_model")
 model_name = "harshadhana/text-summarizer-model"
 
+print("Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
     model_name,
     use_fast=False
 )
 
+print("Tokenizer loaded")
+
+print("Loading model...")
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+print("Model loaded")
 
 # device
 if torch.cuda.is_available():
