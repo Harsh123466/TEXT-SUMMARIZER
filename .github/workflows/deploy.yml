@@ -23,4 +23,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           
           
-          git push --force https://harshadhana:$HF_TOKEN@huggingface.co/spaces/harshadhana/text-summarizer-model main
+          git push --force https://harshadhana:$HF_TOKEN@huggingface.co/spaces/harshadhana/text-summarizer main
