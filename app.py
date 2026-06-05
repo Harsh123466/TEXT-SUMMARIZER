@@ -70,6 +70,7 @@ def summarize_dialogue(dialogue : str) -> str:
 
     # generate the summary => token ids
     model.to(device)
+    # update the generation parameters as needed
     targets = model.generate(
         input_ids=inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
