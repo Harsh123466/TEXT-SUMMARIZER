@@ -4,9 +4,7 @@ from pydantic import BaseModel
 from transformers import T5ForConditionalGeneration, T5Tokenizer, AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 import re
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 
 # Initialize FastAPI app
 app = FastAPI(title="Text Summarixer App", description="Text Summarization using T5", version="1.0")
@@ -42,8 +40,6 @@ else:
 
 model.to(device)
 
-# templating
-template = Jinja2Templates(directory=".")
 
 # Input schema for dialogue => string
 class DialogueInput(BaseModel):
@@ -93,6 +89,6 @@ async def summarize(input: DialogueInput):
     summary = summarize_dialogue(input.dialogue)
     return {"summary": summary}
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return template.TemplateResponse("index.html", {"request": request})
+@app.get("/")
+async def home():
+    return FileResponse("index.html")
